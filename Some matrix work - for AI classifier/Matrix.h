@@ -28,10 +28,8 @@ public:
 	*/
 	void set(int rowNum, int colNum, float newValue);
 
-	//void print(int desiredNumberOfDecimalDigits) const;
+	void print() const;
 
-private: 
-	/*Used for "pretty printing" -> ex: setw()*/
-	int getLargestMagnitude() const; 
+	Matrix& operator * (const Matrix& rhs) const; 
 
 };

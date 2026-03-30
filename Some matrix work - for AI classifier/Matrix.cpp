@@ -1,6 +1,11 @@
 #include "Matrix.h"
 
+
+#include<iomanip>
+#include<iostream> 
 #include<stdexcept>
+
+
 
 Matrix::Matrix(int rowCount, int columnCount)
 	:
@@ -39,23 +44,25 @@ void Matrix::set(int rowNum, int colNum, float newValue)
 	data[rowNum][colNum] = newValue; 
 }
 
-int Matrix::getLargestMagnitude() const
+void Matrix::print() const
 {
-	int largestDigitCount{0}; //init to zero
-
+	constexpr int COL_WIDTH = 5; 
 	for (int row = 0; row < totalRows; ++row)
 	{
 		for (int col = 0; col < totalColumns; ++col)
 		{
-			float currentValue = data[row][col]; //note that a COPY is made here (don't modify the goods)
-
-			while (currentValue > 0)
-			{
-				currentValue = currentValue / 10; //shorter alt: currentValue /= 10;
-				largestDigitCount++; 
-			}
+			std::cout << std::left << std::setw(COL_WIDTH) << data[row][col]; 
 		}
+		std::cout << "\n";
 	}
-
-	return largestDigitCount;
 }
+
+Matrix& Matrix::operator*(const Matrix& rhs) const
+{
+	/*Column count of LHS (this) must match row count of RHS*/
+	if (this->totalColumns != rhs.totalRows) throw std::runtime_error("columns of lefthand matrix do not match rows of righthand matrix");
+
+
+
+}
+
