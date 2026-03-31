@@ -7,14 +7,14 @@ using table = std::vector<std::vector<float>>;
 class Matrix
 {
 private: 
-	int totalRows;
-	int totalColumns; 
 	
 	table data; 
 
 public: 
 	Matrix() = delete;
-	/*initializes all elements to 0.0*/
+	/*initializes all elements to 0.0
+	* @param rowCount -> throws if <= 0
+	*/
 	Matrix(int rowCount, int columnCount);
 
 	/*pass 'er in with an initializer list*/
@@ -28,8 +28,19 @@ public:
 	*/
 	void set(int rowNum, int colNum, float newValue);
 
-	void print() const;
+	void print(bool displayInScientificNotation = false) const;
 
-	Matrix& operator * (const Matrix& rhs) const; 
+	/*An overload that prints matrices side by side (for ease of visualization of multiplication, for example)*/
+	void print(const Matrix& rhs) const; 
 
+	/*fills the matrix with values between min and max (inclusive)*/
+	void randomize(int min, int max); 
+
+	/*
+	* @param rhs -> throws if rhs.totalRows != this->totalColumns
+	*/
+	Matrix operator * (const Matrix& rhs) const; 
+
+private: 
+	int determineMaxDigitCount() const; 
 };
