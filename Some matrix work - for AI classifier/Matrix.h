@@ -2,10 +2,16 @@
 
 #include<vector> 
 
+
+class Dataset; 
+class Classifier;
+
+
 using table = std::vector<std::vector<float>>;
 
 class Matrix
 {
+
 private: 
 	
 	table data; 
@@ -28,7 +34,7 @@ public:
 	*/
 	void set(int rowNum, int colNum, float newValue);
 
-	void print(bool displayInScientificNotation = false) const;
+	void print(int colWidth) const;
 
 	/*An overload that prints matrices side by side (for ease of visualization of multiplication, for example)*/
 	void print(const Matrix& rhs) const; 
@@ -36,10 +42,26 @@ public:
 	/*fills the matrix with values between min and max (inclusive)*/
 	void randomize(int min, int max); 
 
+	/*Intended use: for weight matrix in a classifier 
+	* @param min -> set to -0.5f by default 
+	* @param max -> set to 0.5f by default
+	*/
+	void randomize(float min = -0.5f, float max = 0.5f);
+
 	/*
 	* @param rhs -> throws if rhs.totalRows != this->totalColumns
 	*/
 	Matrix operator * (const Matrix& rhs) const; 
+
+	/*scalar multiplication overload*/
+	Matrix operator * (float scalar) const; 
+
+	Matrix operator - (const Matrix& rhs) const; 
+
+	Matrix getTranspose() const;  
+
+	friend class Dataset;
+	friend class Classifier; 
 
 private: 
 	/*Used for formatting (setting table's column widths)*/

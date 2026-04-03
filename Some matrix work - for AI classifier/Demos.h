@@ -39,7 +39,9 @@ void demoRNGMatrices()
 		a.randomize(minMatrixValue, maxMatrixValue);
 
 		std::cout << "A is:\n";
-		a.print();
+		const int colWidth = 5; 
+
+		a.print(colWidth);
 
 		int bj = aj; //required for matrix multiplication 
 		int bk = dimensionDistribution(rng);
@@ -49,7 +51,7 @@ void demoRNGMatrices()
 		b.randomize(minMatrixValue, maxMatrixValue);
 
 		std::cout << "B is:\n";
-		b.print();
+		b.print(colWidth);
 
 		std::cout << "Side by side:\n";
 		a.print(b);
@@ -58,7 +60,7 @@ void demoRNGMatrices()
 		//a.set(0, 0, 1.0f);
 		Matrix c = a * b;
 
-		c.print();
+		c.print(colWidth);
 	}
 
 	catch (const std::exception& e)

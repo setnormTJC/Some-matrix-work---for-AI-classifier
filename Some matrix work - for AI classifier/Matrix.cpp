@@ -5,14 +5,15 @@
 #include<iostream> 
 #include<random> 
 #include<stdexcept>
+#include <string>
 
 
 
 Matrix::Matrix(int rowCount, int columnCount)
 {
-	//data.reserve;
+	//data.reserve; //NOPE
 	
-	if (rowCount <= 0 || columnCount <= 0) throw std::runtime_error("Cannot have rowCount <= 0 or columnCount <= 0");
+	//if (rowCount <= 0 || columnCount <= 0) throw std::runtime_error("Cannot have rowCount <= 0 or columnCount <= 0");
 
 	data.resize(rowCount, std::vector<float>(columnCount)); 
 
@@ -47,31 +48,33 @@ void Matrix::set(int rowNum, int colNum, float newValue)
 	data[rowNum][colNum] = newValue; 
 }
 
-void Matrix::print(bool displayInScientificNotation) const
+void Matrix::print(int colWidth) const
 {
-	int columnWidth{};
-
-	if (displayInScientificNotation)
-	{
-		columnWidth = 5; 
-	}
-
-	else
-	{
-		int padding = 2; 
-		columnWidth = determineMaxDigitCount() + padding;
-	}
-
-
+	//int padding = 2; 
+	//colWidth = determineMaxDigitCount() + padding; //a previous approach
 
 	std::cout << "Dimensions (rows x cols): " << data.size() << " x " << data.at(0).size() << "\n";
+	bool flag = true; 
 	for (int row = 0; row < data.size(); ++row)
 	{
 		for (int col = 0; col < data.at(0).size(); ++col)
 		{
-			std::cout << std::left << std::setw(columnWidth) << data[row][col]; 
+			std::cout << std::left << std::setw(colWidth) << data[row][col]; 
 		}
 		std::cout << "\n";
+
+		if (row > 20 && flag)
+		{
+			std::cout << "This was the first 20 rows of the matrix - press 'f', then Enter to see the full table\n";
+			std::string response; 
+			std::getline(std::cin, response);
+			
+			if (response != "f")
+			{
+				break;
+			}
+			flag = false; 
+		}
 	}
 	std::cout << "\n";
 }
@@ -136,6 +139,21 @@ void Matrix::randomize(int min, int max)
 	}
 }
 
+void Matrix::randomize(float min, float max)
+{
+	std::mt19937 rng(std::random_device{}());
+
+	std::uniform_real_distribution<float> dist(min, max);
+
+	for (int row = 0; row < data.size(); ++row)
+	{
+		for (int col = 0; col < data.at(0).size(); ++col)
+		{
+			data[row][col] = dist(rng);
+		}
+	}
+}
+
 Matrix Matrix::operator*(const Matrix& rhs) const
 {
 	/*Column count of LHS (this) must match row count of RHS*/
@@ -167,6 +185,60 @@ Matrix Matrix::operator*(const Matrix& rhs) const
 
 	return product; 
 
+}
+
+Matrix Matrix::operator*(float scalar) const
+{
+	Matrix product(data.size(), data.at(0).size());
+
+	for (int row = 0; row < product.data.size(); ++row)
+	{
+		for (int col = 0; col < product.data.at(0).size(); ++col)
+		{
+			product.data[row][col] = this->data[row][col] * scalar;  
+		}
+	}
+	
+	return product; 
+}
+
+Matrix Matrix::operator-(const Matrix& rhs) const
+{
+	if (this->data.size() != rhs.data.size()) throw std::runtime_error("Matrices must have same number of rows if subtracting");
+	if (this->data.at(0).size() != rhs.data.at(0).size()) throw std::runtime_error("Matrices must have same number of columns if subtracting");
+
+	int numberOfRows = rhs.data.size(); 
+	int numberOfCols = rhs.data.at(0).size(); 
+
+	Matrix difference(numberOfRows, numberOfCols);
+
+	for (int row = 0; row < numberOfRows; ++row)
+	{
+		for (int col = 0; col < numberOfCols; ++col)
+		{
+			difference.data[row][col] = this->data[row][col] - rhs.data[row][col]; 
+		}
+	}
+
+	return difference; 
+}
+
+Matrix Matrix::getTranspose() const
+{
+	int originalRowCount = this->data.size();
+	int originalColCount = this->data.at(0).size(); 
+
+	Matrix transpose(originalColCount, originalRowCount); 
+
+	for (int row = 0; row < originalRowCount; ++row)
+	{
+		for (int col = 0; col < originalColCount; ++col)
+		{
+			transpose.data[col][row] = this->data[row][col];
+		}
+	}
+
+	return transpose;
 }
 
 int Matrix::determineMaxDigitCount() const

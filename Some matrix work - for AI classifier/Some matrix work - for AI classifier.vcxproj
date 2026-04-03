@@ -127,11 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Classifier.cpp" />
     <ClCompile Include="Dataset.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Classifier.h" />
     <ClInclude Include="Dataset.h" />
     <ClInclude Include="Demos.h" />
     <ClInclude Include="Matrix.h" />

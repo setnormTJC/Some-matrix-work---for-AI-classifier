@@ -24,6 +24,9 @@
     <ClCompile Include="Dataset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Classifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Matrix.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dataset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Classifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
