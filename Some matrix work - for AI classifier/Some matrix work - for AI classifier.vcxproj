@@ -127,11 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dataset.cpp" />
     <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="Some matrix work - for AI classifier.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dataset.h" />
+    <ClInclude Include="Demos.h" />
     <ClInclude Include="Matrix.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="readme.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

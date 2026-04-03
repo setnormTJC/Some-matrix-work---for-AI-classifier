@@ -42,5 +42,6 @@ public:
 	Matrix operator * (const Matrix& rhs) const; 
 
 private: 
+	/*Used for formatting (setting table's column widths)*/
 	int determineMaxDigitCount() const; 
 };
