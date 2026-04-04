@@ -1,8 +1,13 @@
+#define NOMINMAX
+
 #include "Dataset.h"
 #include<iomanip>
 #include <iostream>
 #include<sstream> 
 #include<string> 
+#include <random>
+
+
 
 Dataset::Dataset(const std::string& url)
 	:
@@ -18,7 +23,17 @@ Dataset::Dataset(const std::string& url)
 
 		parseCSVText(text); 
 
+		normalizeFeatures(); 
+
+		//features.print(10); 
+
+		addBias(); 
+		
+		//shuffle(); 
+
 		determineColumnWidth(); 
+
+		
 	}
 
 	else
@@ -78,6 +93,7 @@ Matrix Dataset::getOneHotTargets() const
 
 		oneHotTargets.set(i, classID, 1.0f);
 	}
+	//oneHotTargets.print(10); 
 
 	return oneHotTargets; 
 }
@@ -225,4 +241,76 @@ void Dataset::determineColumnWidth()
 	int maxFeatureNameLength = it._Ptr->length();
 	int padding = 5;
 	colWidth = maxFeatureNameLength + padding;
+}
+
+void Dataset::normalizeFeatures()
+{
+	int numRows = features.dims().first; 
+	int numCols = features.dims().second;
+
+	for (int col = 0; col < numCols; ++col)
+	{
+		float min = features.data[0][col]; //assume first in column is min and max
+		float max = features.data[0][col]; 
+
+		//find min and max 
+		for (int row = 0; row < numRows; ++row)
+		{
+			min = std::min(min, features.data[row][col]); 
+			max = std::max(max, features.data[row][col]);
+		}
+
+		//now scale: 
+		float range = max - min; 
+		for (int row = 0; row < numRows; ++row)
+		{
+			float newValue = (features.data[row][col] - min) / range;
+			features.data[row][col] = newValue; 
+		}
+
+	}
+}
+
+void Dataset::addBias()
+{
+
+	featureNames.push_back("Bias");
+
+	for (int row = 0; row < features.data.size(); ++row)
+	{
+		features.data.at(row).push_back(1.0f);
+	}
+
+	
+}
+
+void Dataset::shuffle()
+{ 
+	// 1. Create a vector of indices [0, 1, 2, ..., 149]
+	
+	std::vector<int> indices(features.dims().first);
+	std::iota(indices.begin(), indices.end(), 0);
+
+	// 2. Shuffle the indices using a random device
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(indices.begin(), indices.end(), g);
+
+	// 3. Create temporary containers for the shuffled data
+	// Assuming features.data is your std::vector<std::vector<float>>
+	std::vector<std::vector<float>> shuffledFeatures;
+	std::vector<std::vector<float>> shuffledTargets;
+
+	shuffledFeatures.reserve(indices.size());
+	shuffledTargets.reserve(indices.size());
+
+	// 4. Rebuild the data in the new random order
+	for (int i : indices) {
+		shuffledFeatures.push_back(features.data[i]);
+		shuffledTargets.push_back(targets.data[i]);
+	}
+
+	// 5. Assign back to the member variables
+	features.data = shuffledFeatures;
+	targets.data = shuffledTargets;
 }

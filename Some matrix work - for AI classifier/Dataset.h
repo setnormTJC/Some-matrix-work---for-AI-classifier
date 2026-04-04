@@ -61,10 +61,12 @@ private:
 	void determineColumnWidth(); 
 
 
-	//void normalizeFeatures();
+	void normalizeFeatures();
 
+	/*Adds a new column of data to features for "biasing"*/
+	void addBias(); 
 
-
+	void shuffle(); 
 
 	friend class Classifier; 
 };

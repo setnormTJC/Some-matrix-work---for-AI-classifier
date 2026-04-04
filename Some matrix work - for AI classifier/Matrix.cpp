@@ -15,7 +15,7 @@ Matrix::Matrix(int rowCount, int columnCount)
 	
 	//if (rowCount <= 0 || columnCount <= 0) throw std::runtime_error("Cannot have rowCount <= 0 or columnCount <= 0");
 
-	data.resize(rowCount, std::vector<float>(columnCount)); 
+	data.resize(rowCount, std::vector<float>(columnCount, 0.0f)); 
 
 	//for (int currRow = 0; currRow < rowCount; ++currRow)
 	//{
@@ -63,18 +63,18 @@ void Matrix::print(int colWidth) const
 		}
 		std::cout << "\n";
 
-		if (row > 20 && flag)
-		{
-			std::cout << "This was the first 20 rows of the matrix - press 'f', then Enter to see the full table\n";
-			std::string response; 
-			std::getline(std::cin, response);
-			
-			if (response != "f")
-			{
-				break;
-			}
-			flag = false; 
-		}
+		//if (row > 20 && flag)
+		//{
+		//	std::cout << "This was the first 20 rows of the matrix - press 'f', then Enter to see the full table\n";
+		//	std::string response; 
+		//	std::getline(std::cin, response);
+		//	
+		//	if (response != "f")
+		//	{
+		//		break;
+		//	}
+		//	flag = false; 
+		//}
 	}
 	std::cout << "\n";
 }
@@ -221,6 +221,27 @@ Matrix Matrix::operator-(const Matrix& rhs) const
 	}
 
 	return difference; 
+}
+
+Matrix Matrix::operator+(const Matrix& rhs) const
+{
+	if (this->data.size() != rhs.data.size()) throw std::runtime_error("Matrices must have same number of rows if adding");
+	if (this->data.at(0).size() != rhs.data.at(0).size()) throw std::runtime_error("Matrices must have same number of columns if adding");
+
+	int numberOfRows = rhs.data.size();
+	int numberOfCols = rhs.data.at(0).size();
+
+	Matrix sum(numberOfRows, numberOfCols);
+
+	for (int row = 0; row < numberOfRows; ++row)
+	{
+		for (int col = 0; col < numberOfCols; ++col)
+		{
+			sum.data[row][col] = this->data[row][col] + rhs.data[row][col];
+		}
+	}
+
+	return sum;
 }
 
 Matrix Matrix::getTranspose() const

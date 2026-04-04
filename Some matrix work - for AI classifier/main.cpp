@@ -36,15 +36,15 @@ int main()
 	Classifier classifier(dataset);
 
 	float tolerance = 0.05f; 
-	classifier.train(tolerance); 
+	float learningRate = 1.0f; 
+	
+	float accuracy = 0.0f; 
+	while (accuracy < 0.85f)
+	{
+		classifier.train(tolerance, learningRate);  
+
+		accuracy = classifier.test(); 
+	}
 
 
-	classifier.test(); 
-
-
-	//dataset.printFeatureNames(); 
-
-	//dataset.printFeatures(); 
-
-	//demoReadingURL_WithCPRLibrary(); 
 }

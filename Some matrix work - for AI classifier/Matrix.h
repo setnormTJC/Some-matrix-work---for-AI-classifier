@@ -46,7 +46,7 @@ public:
 	* @param min -> set to -0.5f by default 
 	* @param max -> set to 0.5f by default
 	*/
-	void randomize(float min = -0.5f, float max = 0.5f);
+	void randomize(float min = -0.1f, float max = 0.1f);
 
 	/*
 	* @param rhs -> throws if rhs.totalRows != this->totalColumns
@@ -58,7 +58,11 @@ public:
 
 	Matrix operator - (const Matrix& rhs) const; 
 
+	Matrix operator + (const Matrix& rhs) const;
+
+
 	Matrix getTranspose() const;  
+
 
 	friend class Dataset;
 	friend class Classifier; 
